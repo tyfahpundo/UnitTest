@@ -8,7 +8,7 @@ import zw.co.afrosoft.unittest.exceptions.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface TransferService {
+public interface AccountService {
     void transferMoney(long idSender, long idReceiver, BigDecimal amount) throws AccountNotFoundException;
     Iterable<Account> getAllAccounts();
     List<Account> getAccountsByName(String name);

@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 
-public class TransferServiceImpl implements TransferService {
+public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
 
-    public TransferServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 

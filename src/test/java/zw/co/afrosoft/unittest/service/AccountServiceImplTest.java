@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import zw.co.afrosoft.unittest.domain.Account;
 import zw.co.afrosoft.unittest.exceptions.AccountNotFoundException;
@@ -23,11 +22,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class TransferServiceImplTest {
+class AccountServiceImplTest {
     @Mock
     private AccountRepository accountRepository;
     @InjectMocks
-    private TransferServiceImpl transferService;
+    private AccountServiceImpl transferService;
 
     @Test
     @DisplayName("Test the amount is transferred if no errors occurred")
@@ -66,6 +65,21 @@ class TransferServiceImplTest {
         assertThrows(AccountNotFoundException.class,()-> transferService.transferMoney(1L,2L,
                 new BigDecimal(300)));
 
+        verify(accountRepository,never())
+                .changeAmount(anyLong(),any());
+    }
+    @Test
+    @DisplayName("Test if it throws an exception when sender account not found")
+    void transferMoneySenderAccountNotFoundFlow(){
+        Account receiver = new Account();
+        receiver.setId(2L);
+        receiver.setAmount(new BigDecimal(200));
+
+        given(accountRepository.findById(1L))
+                .willReturn(Optional.empty());
+
+        assertThrows(AccountNotFoundException.class,()-> transferService.transferMoney(1L,2L,
+                new BigDecimal(100)));
         verify(accountRepository,never())
                 .changeAmount(anyLong(),any());
     }

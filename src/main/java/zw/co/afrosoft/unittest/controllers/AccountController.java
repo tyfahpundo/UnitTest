@@ -7,32 +7,29 @@ import zw.co.afrosoft.unittest.domain.Account;
 import zw.co.afrosoft.unittest.dto.AccountRequest;
 import zw.co.afrosoft.unittest.dto.AccountResponse;
 import zw.co.afrosoft.unittest.dto.TransferRequest;
-import zw.co.afrosoft.unittest.service.TransferService;
+import zw.co.afrosoft.unittest.service.AccountService;
 
 @RestController
 @RequestMapping("/api/")
 public class AccountController {
-    private final TransferService transferService;
+    private final AccountService accountService;
 
-    public AccountController(TransferService transferService) {
-        this.transferService = transferService;
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
     @PostMapping("transfer")
     public void transferMoney(@RequestBody TransferRequest request){
-        transferService.transferMoney(request.getSenderAccountId(),
+        accountService.transferMoney(request.getSenderAccountId(),
                 request.getReceiverAccountId(), request.getAmount());
     }
     @GetMapping("accounts")
     public Iterable<Account> getAllAccounts(@RequestParam(required = false) String name){
-        if(name==null){
-           return transferService.getAllAccounts();
-        }else{
-           return transferService.getAccountsByName(name);
-        }
+        if(name==null) return accountService.getAllAccounts();
+        else return accountService.getAccountsByName(name);
     }
     @PostMapping("save")
     public ResponseEntity<AccountResponse>  createAccount(@RequestBody AccountRequest request){
-        AccountResponse response = transferService.createAccount(request);
+        AccountResponse response = accountService.createAccount(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
